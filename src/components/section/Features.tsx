@@ -1,6 +1,6 @@
 import React from 'react'
 import SpotlightCard from '../ui/SpotlightCard'
-import { CheckCircle, Truck, Users, Star, Mail } from 'lucide-react'
+import { CheckCircle, Truck, Users, Star } from 'lucide-react'
 
 const Features = () => {
     return (

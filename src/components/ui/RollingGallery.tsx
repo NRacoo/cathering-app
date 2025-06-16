@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
     motion,
@@ -129,7 +130,7 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
 
     return (
         <div className="relative h-[200px] w-full overflow-hidden">
-           
+        
             <div className="flex h-full items-center justify-center [perspective:1000px] [transform-style:preserve-3d]">
                 <motion.div
                     drag="x"
@@ -157,10 +158,12 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
                                 transform: `rotateY(${(360 / faceCount) * i}deg) translateZ(${radius}px)`,
                             }}
                         >
-                            <img
+                            <Image
                                 src={url}
                                 alt="gallery"
-                                className="pointer-events-none h-[120px] w-[300px] rounded-[15px] border-[3px] border-white object-cover transition-transform duration-300 ease-out group-hover:scale-105 sm:h-[100px] sm:w-[220px]"
+                                width={300}
+                                height={120}
+                                className="pointer-events-none rounded-[15px] border-[3px] border-white object-cover transition-transform duration-300 ease-out group-hover:scale-105 sm:h-[100px] sm:w-[220px]"
                             />
                         </div>
                     ))}

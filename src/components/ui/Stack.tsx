@@ -1,8 +1,8 @@
     "use client"
     import { motion, useMotionValue, useTransform } from "framer-motion";
     import { useState, useEffect } from "react";
-       import Image from 'next/image';
- interface CardRotateProps {
+    import Image from 'next/image';
+interface CardRotateProps {
     children: React.ReactNode;
     onSendToBack: () => void;
     sensitivity: number;
@@ -117,10 +117,11 @@
                             transformOrigin: "90% 90%",
                         }}
                     >
-                        <img
+                        <Image
                             src={card.img}
                             alt={`card-${card.id}`}
-                            className="w-full h-full object-cover pointer-events-none"
+                            fill
+                            className="object-cover pointer-events-none"
                             width={cardDimensions.width}
                             height={cardDimensions.height}
                         />
@@ -167,10 +168,11 @@
                                 height: cardDimensions.height,
                             }}
                         >
-                            <img
+                            <Image
                                 src={card.img}
                                 alt={`card-${card.id}`}
-                                className="w-full h-full object-cover pointer-events-none"
+                                fill
+                                className=" object-cover pointer-events-none"
                             />
                         </motion.div>
                     </CardRotate>
