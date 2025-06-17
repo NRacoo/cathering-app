@@ -2,7 +2,7 @@
 import {Badge} from '@/components/ui/badge'
 import {Button} from '@/components/ui/button'
 import RollingGalery from '../ui/RollingGallery'
-
+import Link from 'next/link'
 
 const Hero = () => {
 
@@ -23,11 +23,12 @@ const Hero = () => {
                     Selamat datang di SEA Catering layanan katering sehat nomor satu di Indonesia. SEA Catering adalah solusi katering sehat terdepan di Indonesia. Makanan lezat dan bergizi kami siap antar ke rumah Anda praktis, personal, dan cocok untuk gaya hidup sehat.
                     </p>
                     <div className= "flex flex-col sm:flex-row gap-4 justify-center"> 
-                        <Button variant ="outline" className='bg-green-600 text-white hover:bg-green-700 hover:text-white'>
-                            Start your Journey
+                        <Button variant ="outline" className='bg-emerald-700 text-white hover:bg-emerald-900 hover:text-white'>
+                            <Link href='/Subcriptions'>Start Your Journey</Link>
+                            
                         </Button>
                         <Button variant="outline">
-                            View Meal Plans
+                            <Link href ='/Meals'>View Meals Plan</Link>
                         </Button>
                     </div>
                 </div>

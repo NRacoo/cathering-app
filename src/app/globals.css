@@ -45,6 +45,28 @@
   --ring: oklch(0.556 0 0);
 }
 
+/*Carousel animation  */
+@keyframes infinite-scroll{
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 40s linear infinite;
+}
+
+/* Text clamp utility */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @layer base {
   * {
     @apply border-border;
