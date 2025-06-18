@@ -7,103 +7,17 @@
     import { useState } from 'react'
     import { Eye, EyeOff, CheckCircle, X} from 'lucide-react'
     import Link from 'next/link'
-    import { toast } from '@/components/hooks/use-toast'
+    
     export default function Register(){
         const [showPassword, setShowPassword] = useState(false)
-        const [formData, setFormData] = useState({
+        const [confirmPassword, setConfirmPassword] = useState(false)
+        const [doPasswordsMatch]= useState (false)
+        const [formData] = useState({
             email: '',
             password:'',
             confirmPassword:'',
             agreeToTerms:false,
         })
-
-        const passwordRequirements = [
-            {test: (pwd) => pwd.length >=8, text:'password at least 8 characters'},
-            {test: (pwd) => /[A-z]/.test(pwd), text: 'One uppercase letter'},
-            {test: (pwd) => /[a-z]/.test(pwd), text:'One lowercase letter'},
-            {test:(pwd) => /\d/.test(pwd), text:"One number"},
-            {test:(pwd) => /[~!@#$%^&*"'{}<>?/`]/.test(pwd), text:'One spesial Character'}
-        ]
-
-        
-        const [confirmPassword, setConfirmPassword] =useState(false)
-        const [isLoading, setIsLoading] = useState(false)
-
-        const isPasswordValid = passwordRequirements.every((req) => req.test(formData.password))
-        const doPasswordsMatch = formData.password === formData.confirmPassword && formData.confirmPassword !== ""
-
-        const handleSubmit = async (e) => {
-            e.preventDefault()
-
-            // Validation
-            if (!formData.fullName.trim()) {
-            toast({
-                title: "Error",
-                description: "Full name is required",
-                variant: "destructive",
-            })
-            return
-            }
-
-            if (!formData.email.trim()) {
-            toast({
-                title: "Error",
-                description: "Email is required",
-                variant: "destructive",
-            })
-            return
-            }
-
-            if (!isPasswordValid) {
-            toast({
-                title: "Error",
-                description: "Password does not meet requirements",
-                variant: "destructive",
-            })
-            return
-            }
-
-            if (!doPasswordsMatch) {
-            toast({
-                title: "Error",
-                description: "Passwords do not match",
-                variant: "destructive",
-            })
-            return
-            }
-
-            if (!formData.agreeToTerms) {
-            toast({
-                title: "Error",
-                description: "Please agree to the terms and conditions",
-                variant: "destructive",
-            })
-            return
-            }
-
-            setIsLoading(true)
-
-            try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-
-            toast({
-                title: "Account Created!",
-                description: "Your account has been created successfully. Please sign in.",
-            })
-
-            // Redirect to login
-            window.location.href = "/login"
-            } catch {
-            toast({
-                title: "Registration Failed",
-                description: "Failed to create account. Please try again.",
-                variant: "destructive",
-            })
-            } finally {
-            setIsLoading(false)
-            }
-        }
 
         return (
             <div className='min-h-screen flex items-center justify-center py-12  px-4'>
@@ -119,7 +33,7 @@
                     </CardDescription>
                     </CardHeader>
                     <CardContent>
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <div className='flex flex-col gap-6'>
                         <div className='grid gap-2'>
                             <Label htmlFor = 'email'>
@@ -128,9 +42,8 @@
                             <Input 
                             id='email'
                             type='email'
-                            placeholder='m@google.com'
                             value={formData.email}
-                            onChange={(e) => setFormData((prev) => ({...prev, email:e.target.value}))}
+                            placeholder='m@google.com'
                             required/>
                         </div>
                         <div className='grid gap-2'>
@@ -143,7 +56,6 @@
                             id='password'
                             type={showPassword ? 'text' : 'password'}
                             value={formData.password}
-                            onChange={(e) => setFormData((prev) =>({... prev, password:e.target.value}))}
                             placeholder='Masukan kata sandi anda'
                             required/>
                             <button
@@ -159,12 +71,11 @@
                             id='confirmpassword'
                             type={confirmPassword ? 'text' : 'password'}
                             value={formData.confirmPassword}
-                            onChange={(e) => setFormData((prev) =>({... prev, confirmPassword:e.target.value}))}
                             placeholder='Masukan kata sandi anda'
                             required/>
                             <button
                             type='button'
-                            onClick={()=>setConfirmPassword(!confirmPassword)}
+                            onClick ={()=>setConfirmPassword(!confirmPassword)}
                             className=' ml-auto -translate-y-8 pr-4 text-gray-400 hover:text-gray-600'>
                             {confirmPassword ? <EyeOff className='h-4 w-4'/> : <Eye className='h-4 w-4'/>}
                             </button>
@@ -188,8 +99,7 @@
                         )}
                         </div>
                         <Button type='submit' size='lg' className='w-full bg-emerald-700 hover:bg-emerald-900'
-                        disabled={isLoading || !isPasswordValid || doPasswordsMatch|| !formData.agreeToTerms}>
-                        {isLoading ? 'Daftar...' : 'Daftar'}
+                        >Daftar
                         </Button>
                     </form>
                         <div className=' text-center'>

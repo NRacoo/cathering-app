@@ -7,65 +7,17 @@ import { Card, CardTitle, CardHeader, CardContent, CardDescription, CardFooter} 
 import Link from 'next/link'
 import {useState} from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import { toast } from '@/components/hooks/use-toast'
 
 
 export default function Login(){
-  const [formData, setFromData] = useState({
+  const [formData] = useState({
       email: '',
       password: '',
       rememberMe:false,
   })
 
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (!formData.email || !formData.password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setIsLoading(true)
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Mock authentication - in real app, this would validate against backend
-      if (formData.email === "admin@seacatering.com" && formData.password === "Admin123!") {
-        toast({
-          title: "Welcome back!",
-          description: "Logged in successfully as Admin",
-        })
-        // Redirect to admin dashboard
-        window.location.href = "/admin/dashboard"
-      } else if (formData.email && formData.password.length >= 8) {
-        toast({
-          title: "Welcome back!",
-          description: "Logged in successfully",
-        })
-        // Redirect to user dashboard
-        window.location.href = "/dashboard"
-      } else {
-        throw new Error("Invalid credentials")
-      }
-    } catch {
-      toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const [isLoading] = useState(false)
 
   return(
     <div className='min-h-screen flex items-center justify-center py-12 px-4'> 
@@ -81,7 +33,7 @@ export default function Login(){
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit}>
+                  <form>
                     <div className='flex flex-col gap-6'>
                       <div className='grid gap-2'>
                         <Label htmlFor = 'email'>
@@ -91,7 +43,6 @@ export default function Login(){
                         id='email'
                         type='email'
                         value={formData.email}
-                        onChange={(e)=>setFromData((prev)=>({...prev, email:e.target.value}))}
                         placeholder='m@google.com'
                         required/>
                       </div>
@@ -106,7 +57,6 @@ export default function Login(){
                         id='password'
                         type={showPassword ? 'text' : 'password'}
                         value={formData.password}
-                        onChange={(e) => setFromData((prev) =>({... prev, password:e.target.value}))}
                         placeholder='Masukan kata sandi anda'
                         required/>
                         <button
