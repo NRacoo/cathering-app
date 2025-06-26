@@ -5,6 +5,7 @@ import "./globals.css";
 import Navigation from '@/components/section/Navigation'
 import Footer from "@/components/section/Footer";
 import AuthProvider from "./AuthProvider";
+import foodService from '@/components/gambar/food-service.png'
 
 
 const geistSans = Geist({
@@ -19,6 +20,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SEA-Catering",
+  icons: {
+    icon: foodService.src,
+  },
   description: "Healthy Meals, Anytime, Anywhere",
   viewport: {
     width: 'device-width',
