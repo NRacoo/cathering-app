@@ -7,20 +7,56 @@ import { Card, CardTitle, CardHeader, CardContent, CardDescription, CardFooter} 
 import Link from 'next/link'
 import {useState} from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 export default function Login(){
-  const [formData] = useState({
-      email: '',
-      password: '',
-      rememberMe:false,
-  })
+  
+  const [error, setError] = useState('')
+
+  const{push} = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) =>{
+    e.preventDefault();
+    const email =(e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
+    const password = (e.currentTarget.elements.namedItem('password') as HTMLInputElement).value
+    setIsLoading(true);
+    try{
+      const res = await signIn('credentials', {
+        email,
+        password,
+        callbackUrl,
+        redirect: false
+      })
+      if(!res?.error){
+        push(callbackUrl)
+      }else{
+        if(res.status === 401){
+          setError('Email atau Password Salah')
+          if (e.currentTarget && typeof e.currentTarget.reset === 'function') {
+            e.currentTarget.reset();
+          }
+        }
+      }
+    }catch(err){
+      console.error(err)
+      setError('Terjadi Kesalahan saat login')
+    }
+  }
 
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   return(
-    <div className='min-h-screen flex items-center justify-center py-12 px-4'> 
+    <div className='min-h-screen flex items-center justify-center py-12 px-4 flex-col'>
+      {error !== '' && (
+        <div className = 'text-center '>
+          <h3 className='text-red-500 font-semibold'>Email atau Password salah</h3>
+        </div>
+      )} 
       <section className='bg-gradient-to-br from-green-50 to-blue-50'>
           <div className='w-full max-w-md'>
               <Card>
@@ -33,7 +69,7 @@ export default function Login(){
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form>
+                  <form onSubmit={handleLogin}>
                     <div className='flex flex-col gap-6'>
                       <div className='grid gap-2'>
                         <Label htmlFor = 'email'>
@@ -41,8 +77,7 @@ export default function Login(){
                         </Label>
                         <Input 
                         id='email'
-                        type='email'
-                        value={formData.email}
+                        type='email'                       
                         placeholder='m@google.com'
                         required/>
                       </div>
@@ -56,7 +91,6 @@ export default function Login(){
                         <Input
                         id='password'
                         type={showPassword ? 'text' : 'password'}
-                        value={formData.password}
                         placeholder='Masukan kata sandi anda'
                         required/>
                         <button
@@ -74,7 +108,7 @@ export default function Login(){
                   </form>
                 </CardContent>
                 <div className=' text-center'>
-                  <p className='text-sm text-gray-600'>Belum mempunyai akun? {""}<Link href ='/Register' className='text-emerald-700 hover:text-emerald-900 font-medium'>Daftar di sini</Link></p>
+                  <p className='text-sm text-gray-600'>Belum mempunyai akun? {""}<Link href ='/Auth/Register' className='text-emerald-700 hover:text-emerald-900 font-medium'>Daftar di sini</Link></p>
 
                 </div>
                 <CardFooter className='flex-col gap-2'>

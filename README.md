@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catering App
+
+A modern catering web application built with Next.js, Firebase, and NextAuth.  
+Includes an admin dashboard (login: `hello@seacatering.com`, password: `admin123`).
+
+---
+
+## Features
+
+- User registration and login (with email & password)
+- Admin dashboard
+- Protected routes
+- Firebase Firestore integration
+- Responsive UI with Tailwind CSS
+- State management for authentication
+- Error handling and validation
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/cathering-app.git
+cd cathering-app
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Firebase Setup
+
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
+2. Enable **Authentication** (Email/Password) and **Firestore Database**.
+3. Copy your Firebase config and set the following environment variables in a `.env.local` file at the root of your project:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id
+NEXTAUTH_SECRET=your-random-secret
+```
+
+> For more details, see [FIREBASE_SETUP.md](FIREBASE_SETUP.md).
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Creating the Admin User
 
-## Learn More
+To create the admin dashboard user:
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [http://localhost:3000/Auth/Register](http://localhost:3000/Auth/Register)
+2. Register with:
+   - **Email:** `hello@seacatering.com`
+   - **Password:** `admin123`
+   - **Fullname:** (any name, e.g., "Admin")
+3. After registration, you can log in at [http://localhost:3000/Auth/Login](http://localhost:3000/Auth/Login) with these credentials.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> **Note:**  
+> By default, new users are assigned the `member` role.  
+> To make this user an admin, you must manually update their `role` field in Firestore to `admin` using the Firebase Console.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev` — Start the development server
+- `npm run build` — Build for production
+- `npm start` — Start the production server
+- `npm run lint` — Run ESLint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Project Structure
+
+```
+src/
+  app/                # Next.js app directory
+    Auth/             # Login & Register pages
+    dashboard/        # Admin dashboard
+    api/              # API routes (Next.js)
+  components/         # UI components
+  lib/firebase/       # Firebase config & service functions
+  types/              # TypeScript types
+```
+
+---
+
+## Dependencies
+
+- Next.js
+- React
+- Firebase
+- NextAuth
+- Tailwind CSS
+- bcrypt
+- Radix UI
+- and more (see `package.json`)
+
+---
+
+## Firestore Security Rules
+
+```js
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
+---
+
+## License
+
+MIT
