@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '@/components/ui/input'
@@ -11,14 +11,14 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 
-export default function Login(){
-  
+function LoginForm() {
   const [error, setError] = useState('')
-
   const{push} = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/'
-  
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     const email =(e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
@@ -45,13 +45,11 @@ export default function Login(){
       console.error(err)
       setError('Terjadi Kesalahan saat login')
     }
+    setIsLoading(false);
   }
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  return(
-    <div className='min-h-screen flex items-center justify-center py-12 px-4 flex-col'>
+  return (
+    <>
       {error !== '' && (
         <div className = 'text-center '>
           <h3 className='text-red-500 font-semibold'>Email atau Password salah</h3>
@@ -117,6 +115,16 @@ export default function Login(){
               </Card>
           </div>
       </section>
+    </>
+  )
+}
+
+export default function Login(){
+  return (
+    <div className='min-h-screen flex items-center justify-center py-12 px-4 flex-col'>
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   )
 }
