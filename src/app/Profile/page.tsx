@@ -73,7 +73,7 @@ export default function ProfilePage() {
     };
 
     useEffect(() =>{
-        if (status === 'unauthenticated' && !session) {
+        if (status === 'unauthenticated') {
             router.push('/Auth/Login');
         }
         else{
