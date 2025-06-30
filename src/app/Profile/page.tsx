@@ -76,11 +76,8 @@ export default function ProfilePage() {
         if (status === 'unauthenticated') {
             router.push('/Auth/Login');
         }
-        else{
-            router.push('/')
-        }
-    
-    }, [router, status, session])
+        
+    }, [ status])
 
     if (status === 'loading') {
         return (
