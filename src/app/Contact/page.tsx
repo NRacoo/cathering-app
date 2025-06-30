@@ -18,7 +18,7 @@ export default function ContactPage()  {
     <div className='min-h-screen'>
       
         
-      <section className='py-20 bg-gradient-to-br from-green-50 to-blue-50 '>
+      <section className='py-16 bg-gradient-to-br from-green-50 to-blue-50 '>
         <div className='container mx-auto px-4'>
           <div className='text-center max-w-3xl mx-auto'>
               <h1 className=' text-4xl md:text-5xl font-bold text-gray-900 mb-6'>Contact Us</h1>

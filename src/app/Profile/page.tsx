@@ -1,5 +1,5 @@
 'use client'
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { User, X, Edit, Camera, Save, Building, Globe, Bell, Calendar } from "lucide-react";
+import { User, X, Edit, Camera, Save, Building, Globe, Bell, Calendar, LogOut } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 
@@ -73,12 +73,12 @@ export default function ProfilePage() {
     };
 
     useEffect(() =>{
-        if (status === 'unauthenticated' || !session) {
+        if (status === 'unauthenticated' && !session) {
             router.push('/Auth/Login');
-        }
-        else{
+        }else{
             router.push('/')
         }
+       
     
     }, [router, status, session])
 
@@ -119,14 +119,24 @@ export default function ProfilePage() {
                                             Perbarui informasi profil Anda
                                         </CardDescription>
                                     </div>
-                                    <Button
-                                        variant={isEditing ? "outline" : "default"}
-                                        onClick={() => setIsEditing(!isEditing)}
-                                        className="flex items-center gap-2"
-                                    >
-                                        {isEditing ? <X className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
-                                        {isEditing ? 'Batal' : 'Edit'}
-                                    </Button>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant={isEditing ? "outline" : "default"}
+                                            onClick={() => setIsEditing(!isEditing)}
+                                            className="flex items-center gap-2"
+                                        >
+                                            {isEditing ? <X className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
+                                            {isEditing ? 'Batal' : 'Edit'}
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => signOut()}
+                                            className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                                        >
+                                            <LogOut className="h-4 w-4" />
+                                            Logout
+                                        </Button>
+                                    </div>
                                 </div>
                             </CardHeader>
                             <CardContent className="space-y-6">
@@ -248,6 +258,7 @@ export default function ProfilePage() {
                                     </div>
                                 </div>
 
+                                <div>
                                 {isEditing && (
                                     <div className="flex justify-end gap-2 pt-4 border-t">
                                         <Button
@@ -270,6 +281,9 @@ export default function ProfilePage() {
                                         </Button>
                                     </div>
                                 )}
+
+                                </div>
+
                             </CardContent>
                         </Card>
 
