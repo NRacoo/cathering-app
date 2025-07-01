@@ -73,12 +73,16 @@ export default function ProfilePage() {
     };
 
     useEffect(() =>{
-        if (status === 'unauthenticated' && !session) {
+        if (status === 'unauthenticated') {
             router.push('/Auth/Login');
         }
         
+<<<<<<< HEAD
     
     }, [router, status, session])
+=======
+    }, [ status])
+>>>>>>> 8bb7a5edd0626ed80edb09d753f10736db583d6d
 
     if (status === 'loading') {
         return (
