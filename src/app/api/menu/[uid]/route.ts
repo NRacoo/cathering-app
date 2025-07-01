@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteMenu } from "@/lib/firebase/service";
 
-export async function DELETE (request : NextRequest, context: {params : {uid : string}}){
-    const {uid} = context.params
+export async function DELETE (request : NextRequest, {params} : {params : Promise<{uid : string}>}){
+
+
+    const {uid} = await params
 
     if(!uid){
         return NextResponse.json({message : 'ID menu tidak ditemukan'}, {status : 400})

@@ -76,7 +76,8 @@ export default function ProfilePage() {
         if (status === 'unauthenticated') {
             router.push('/Auth/Login');
         }
-    }, [ status])
+    }, [status])
+
     if (status === 'loading') {
         return (
             <div className="min-h-screen flex items-center justify-center">
