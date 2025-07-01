@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-
+  // Semua aturan lint dihapus
 ];
 
 export default eslintConfig;
