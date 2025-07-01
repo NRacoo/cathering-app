@@ -10,7 +10,6 @@ export interface DashboardData {
   }
   
   export interface MenuFormData {
-    id: string;
     name: string;
     price: string;
     image: string;

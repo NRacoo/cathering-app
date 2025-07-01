@@ -9,13 +9,12 @@ import {useState} from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
 
-function LoginForm() {
+
+function LoginForm(searchParams : any) {
   const [error, setError] = useState('')
   const{push} = useRouter()
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const callbackUrl = searchParams.callbackUrl || '/'
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -31,14 +30,13 @@ function LoginForm() {
         callbackUrl,
         redirect: false
       })
-      if(!res?.error){
-        push(callbackUrl)
-      }else{
-        if(res.status === 401){
-          setError('Email atau Password Salah')
-          if (e.currentTarget && typeof e.currentTarget.reset === 'function') {
-            e.currentTarget.reset();
-          }
+      if (res && !res.error) {
+        push(res.url || callbackUrl);
+      } else {
+        if (res?.status === 401) {
+          setError("Email atau Password Salah");
+        } else {
+          setError("Login gagal. Silakan coba lagi.");
         }
       }
     }catch(err){
@@ -122,9 +120,9 @@ function LoginForm() {
 export default function Login(){
   return (
     <div className='min-h-screen flex items-center justify-center py-12 px-4 flex-col'>
-      <Suspense>
+      
         <LoginForm />
-      </Suspense>
+      
     </div>
   )
 }

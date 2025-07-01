@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 
 
@@ -35,6 +36,8 @@ export default function MenuPage (){
         popular: boolean;
       };
 
+      const {data : session} = useSession()
+
     const [menu, setMenu] = useState<MenuItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -49,6 +52,28 @@ export default function MenuPage (){
             }
         }catch(error){
             console.error('error saat mengambil menu', error)
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
+    const handleDeleteMenu = async (uid: string) => {
+        setIsLoading(true)
+        try{
+            const res = await fetch(`api/menu/${uid}`, {
+                method : 'DELETE',
+                body:JSON.stringify({uid}),
+                headers:{'content-Type' :'application/json'}
+            });
+            const result = await res.json()
+            if(res.ok){
+                alert(result.message)
+                setMenu((prev) => prev.filter(m => m.id !== uid))
+            }else{
+                alert("gagal menghapus menu: " + result.message)
+            }
+        }catch(error){
+            console.error('error saat menghapus menu', error)
         }finally{
             setIsLoading(false)
         }
@@ -116,15 +141,15 @@ export default function MenuPage (){
                             
                             <CardContent className='space-y-4'>
                                 <div className='space-y-2'>
-                                {plan.features.slice(0.3).map((feature : string, index : number)=>(
-                                    <div key={index} className='flex items-center gap-2 px-2'>
+                                {plan.features.slice(0,3).map((feature : string, index : number)=>(
+                                    <div key={feature} className='flex items-center gap-2 px-2'>
                                         <CheckCircle className='h-4 w-4 text-green-600 '/>
                                         <span className='text-sm text-gray-600'>{feature}</span>
                                     </div>
                                 ))}
                                 </div>
 
-                                <div className='flex gap-2 px-2'>
+                                <div className='flex flex-col gap-2 px-2'>
                                     <Dialog >
                                         <DialogTrigger asChild>
                                             <Button variant='outline' className='flex-1'>
@@ -211,6 +236,12 @@ export default function MenuPage (){
                                     <Button className='flex-1'>
                                         <Link href='/Subcriptions'>Pilih Menu</Link>
                                     </Button>
+                                    {session?.user?.role === 'admin' && (
+                                        <Button
+                                        variant='destructive'
+                                        onClick={() => handleDeleteMenu(plan.id)}
+                                        className=''> Hapus Menu </Button>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>

@@ -1,7 +1,6 @@
-import  {query, collection, getFirestore, where, getDocs, addDoc} from 'firebase/firestore'
+import  {query, collection, getFirestore, where, getDocs, addDoc, deleteDoc, doc, getDoc} from 'firebase/firestore'
 import app from './init'
 import bcrypt from 'bcrypt'
-import { CustomUser } from "@/types/admin"
 
 const db = getFirestore(app)
 
@@ -49,19 +48,12 @@ export async function Login(
         email:string
     }
 ) {
-    const email = data.email.toLowerCase()
-    const q = query(collection (db, 'users'), where('email', '==', email))
+    const q = query(collection (db, 'users'), where('email', '==', data.email))
     const snapShot = await getDocs(q)
-    const user = snapShot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-            id: doc.id,
-            email: data.email as string,
-            fullname: data.fullname as string,
-            password: data.password as string,
-            role: data.role as string,
-        } as CustomUser;
-    });
+    const user = snapShot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }))
 
     if(user && user[0]){
         return user[0]
@@ -71,7 +63,6 @@ export async function Login(
 }
 
 export async function uploadMenu(data:{
-    id:string,
     name:string,
     price:number,
     image:string,
@@ -106,5 +97,27 @@ export async function getMenu(){
         return {status : true, data : menus}
     }catch(error){
         console.error('error saat mengambil menu', error)
+    }
+}
+
+export async function deleteMenu(uid: string){
+    try{
+            const q = await doc(db, 'menu', uid)
+            const snap = await getDoc(q)
+
+            if(!snap.exists){
+                return {status: false, statusCode : 500, message : 'Menu tidak ditemukan'};
+            }
+
+            await deleteDoc(q)
+            return {status : true, statusCode : 200, message : 'Menu berhasil dihapus'}
+        
+    }catch(error){
+        console.error('error saat menghapus menu', error)
+        return {
+            status: false,
+            statusCode: 500,
+            message: 'Gagal menghapus menu',
+          };
     }
 }

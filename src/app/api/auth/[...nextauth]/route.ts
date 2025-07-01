@@ -46,31 +46,28 @@ const authOptions: NextAuthOptions = {
                 password: { label: 'password', type: 'password' },
             },
             async authorize(credentials) {
-                const { email, password } = credentials as {
-                    email: string;
-                    password: string;
-                };
-                
-                // Fix: Handle the return type properly
-                const user: CustomUser | null = await Login({ email });
+               try{
+                const {email, password} = credentials as{email : string, password : string}
+                const user : any = await Login({email})
 
-                if (user) {
-                    const passwordMatch = await compare(password, user.password);
-                    if (passwordMatch) {
-                        return {
-                            id: user.id,
-                            email: user.email,
-                            fullname: user.fullname,
-                            role: user.role,
-                        };
-                    }
+                if(!user){
+                    return null
                 }
-                return null;
+                const passwordMatch = await compare(password, user.password)
+                if(passwordMatch){
+                    return user
+                }else{
+                    return null
+                }
+               }catch(error){
+                    console.log(error)
+                    return null
+               }
             },
         }),
     ],
     callbacks: {
-        async jwt({ token, account, user }) {
+        async jwt({ token, account, user } : any) {
             if (account?.provider === 'credentials' && user) {
                 token.id = user.id;
                 token.email = user.email;
@@ -79,19 +76,22 @@ const authOptions: NextAuthOptions = {
             }
             return token;
         },
-        async session({ session, token }) {
-            if (token) {
-                session.user.id = token.id;
-                session.user.email = token.email;
-                session.user.fullname = token.fullname;
-                session.user.role = token.role;
+        async session({ session, token } : any) {
+            if('email' in token ){
+                session.user.email = token.email
+            }
+            if('fullname' in token){
+                session.user.fullname = token.fullname
+            }
+            if('role' in token){
+                session.user.role = token.role 
             }
             return session;
         }
     },
     pages: {
         signIn: '/Auth/Login',
-        signOut: '/Auth/Login',
+       
     }
 };
 

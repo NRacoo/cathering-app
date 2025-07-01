@@ -1,7 +1,7 @@
 'use client'
 import {useRouter } from 'next/navigation'
 import Dock from '../ui/Dock'
-import { Users, Home,Contact, BookText, User} from 'lucide-react'
+import { Users, Home,Contact, BookText, User, LogOut} from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Button } from '../ui/button'
 import Link from 'next/link'
@@ -76,7 +76,9 @@ export function Navigation (){
                 {status === 'authenticated' ? (
                     <>
                     <div className='flex items-center gap-2 ml-auto '>
-                        <Button variant='outline' className='bg-transparant font-semibold text-gray-600 hover:text-emerald-500' onClick={() => signOut()}>Logout</Button>
+                        <Button variant='outline' className=' flex items-centerbg-transparant font-semibold text-gray-600 hover:text-emerald-500' onClick={() => signOut()}>
+                        <LogOut className="h-4 w-4" />
+                        Logout</Button>
                         <Link href ='/dashboard' className='flex items-center gap-2'>
                         <User className = 'text-emerald-500 w-6 h-6'/>
                         <h2 className ='text-sm font-semibold'>{session?.user?.fullname}</h2>

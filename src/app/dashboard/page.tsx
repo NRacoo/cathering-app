@@ -43,13 +43,12 @@ export default function AdminPage(){
     })
 
     useEffect(()=> {
-        if(typeof window !== undefined){
+        if(typeof window !== 'undefined'){
            setData(generateChartData(dateRange.from, dateRange.to))
         }
     }, [dateRange])
 
     const [menuForm, setMenuForm] = useState<MenuFormData>({
-        id: '',
         name: '',
         price: '',
         image: '',
@@ -64,7 +63,6 @@ export default function AdminPage(){
 
     const handleUploadMenu = async (): Promise<void> => {
            const payload = {
-            id: menuForm.id,
             name: menuForm.name,
             price: parseInt(menuForm.price),
             image: menuForm.image,
@@ -93,7 +91,6 @@ export default function AdminPage(){
             if(response.ok) {
                 alert("Menu berhasil diupload" + data.message)
                 setMenuForm({
-                    id: '',
                     name: '',
                     price: '',
                     image: '',
@@ -223,7 +220,6 @@ return(
                                     <CardDescription>Formulir unggah menu baru ke database</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    <Input placeholder="ID Menu" value={menuForm.id} onChange={(e) => setMenuForm({ ...menuForm, id: e.target.value })} />
                                     <Input placeholder="Nama Menu" value={menuForm.name} onChange={(e) => setMenuForm({ ...menuForm, name: e.target.value })} />
                                     <Input placeholder="Harga" type="number" value={menuForm.price} onChange={(e) => setMenuForm({ ...menuForm, price: e.target.value })} />
                                     <Input placeholder="URL Gambar" value={menuForm.image} onChange={(e) => setMenuForm({ ...menuForm, image: e.target.value })} />
