@@ -9,6 +9,7 @@ Includes an admin dashboard (login: `hello@seacatering.com`, password: `admin123
 
 - User registration and login (with email & password)
 - Admin dashboard
+- Admin can delete menus that have been created
 - Protected routes
 - Firebase Firestore integration
 - Responsive UI with Tailwind CSS
